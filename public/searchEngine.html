@@ -1,0 +1,8 @@
+<form class='search' ng-controller='searchController'>
+	<h1>Rap Analysis</h1>
+	<p>Because hip hop is a science</p>
+	<input type='text' placeholder='Enter an Artist' ng-model='artistName'></input>
+	<input type='text' placeholder='Enter a Topic (Optional)' ng-model='topic'></input>
+	<button type='button' class='btn btn-warning' ng-click='getArtistPage()'></button>
+	<h1>{{artistInfo.name}}</h1>
+</form>

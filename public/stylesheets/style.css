@@ -1,0 +1,35 @@
+body {
+  	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  	background: #435257 !important;
+  	padding-top:70px;
+	width: 100%;
+    height: 100%;
+	width: 100%;
+    height: 100%;
+}
+div {
+	text-align: center;
+}
+
+h1 {
+	color: white !important;
+}
+
+p {
+	color: white;
+}
+
+input {
+	width: 100%;
+	height: 30px;
+	vertical-align: center;
+	margin-top: 40px;
+	border-collapse: collapse;
+}
+
+button {
+	width: 40%;
+	height: 50px;
+	margin-top: 50px;
+	font-size: 5pt;
+}
