@@ -46,7 +46,7 @@ function getAlbumSongs(album, callback){
         results = response['results'];
         for(i=0; i < response['resultCount']; i++){
             var song_title = results[i]['trackName'];
-            console.log(song_title)
+            //console.log(song_title)
           }
         }
       }
@@ -66,8 +66,8 @@ function getArtistSongs(artist, callback) {
             album.title = album_title;
             albums.push(album);
         }
-        console.log(albums)
+        //console.log(albums)
     });
 }
 
-getAlbumSongs("To Pimp A Butterfly", console.log)
+getArtistSongs("Kendrick Lamar", console.log)
