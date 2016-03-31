@@ -70,4 +70,4 @@ function getArtistSongs(artist, callback) {
     });
 }
 
-getAlbumSongs("Yeezus", console.log)
+getAlbumSongs("To Pimp A Butterfly", console.log)
