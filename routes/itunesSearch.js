@@ -1,8 +1,10 @@
-http = require('http')
-var searchitunes = require ('searchitunes');
+var http = require('http')
+  searchitunes = require ('searchitunes')
+  async = require('async')
+  exports = module.exports = {};
 
 // Find free Github app for iPhone in Dutch App Store
-function getAlbums(artist, callback){
+exports.getAlbums = function(artist, callback){
     artist = artist.replace(/ /g, "+");
     console.log(artist)
     searchitunes (
@@ -26,7 +28,7 @@ function getAlbums(artist, callback){
     );
 }
 
-function getAlbumSongs(album, callback){
+exports.getAlbumSongs = function(album, callback){
     album = album.replace(/ /g, "+");
     console.log(album)
     searchitunes (
@@ -58,27 +60,36 @@ function getAlbumSongs(album, callback){
     );
 }
 
-function getArtistSongs(artist, callback) {
-    getAlbums(artist, function(response){
+exports.getArtistSongs = function(artist, callback) {
+    exports.getAlbums(artist, function(response){
         results = response['results'];
         albums = [];
         albumString = '';
-        for(i=0; i < response['resultCount']; i++){
-            var album = {
-                title: "",
-                songs: []
+        async.series([
+          function() {
+            for(i=0; i < response['resultCount']; i++){
+              var album = {
+                  title: "",
+                  songs: []
+              }
+              var album_title = results[i]['collectionName'];
+              if(albumString.indexOf(album_title) === -1) {
+                albumString += album_title;
+                album.title = album_title;
+                albums.push(album);
+                console.log('in');
+              }
             }
-            var album_title = results[i]['collectionName'];
-            if(albumString.indexOf(album_title) === -1) {
-              albumString += album_title;
-              album.title = album_title;
-              albums.push(album);
+          },
+          function() {
+            for(i=0; i < albums.length; i++) {
+              exports.getAlbumSongs(albums[i].title, function(songs) {
+                console.log('in');
+                albums.songs[i] = songs;
+              });
             }
-        }
-        callback(albums);
+          }
+        ],
+        callback(albums));
     });
 }
-
-getAlbumSongs('To Pimp A Butterfly', function(songs) {
-  console.log(songs);
-});
