@@ -41,13 +41,18 @@ function getAlbumSongs(album, callback){
           // Error
           console.log ('Search failed: %s', err.message);
         } else {
-          // All good
-        response = data;
-        results = response['results'];
-        for(i=0; i < response['resultCount']; i++){
+          response = data;
+          results = response['results'];
+          songs = [];
+          songString = '';
+          for(i=0; i < response['resultCount']; i++){
             var song_title = results[i]['trackName'];
-            //console.log(song_title)
+            if(songString.indexOf(song_title) === -1) {
+              songString += song_title;
+              songs.push(song_title);
+            }
           }
+          callback(songs);
         }
       }
     );
@@ -56,18 +61,24 @@ function getAlbumSongs(album, callback){
 function getArtistSongs(artist, callback) {
     getAlbums(artist, function(response){
         results = response['results'];
-        albums = []
+        albums = [];
+        albumString = '';
         for(i=0; i < response['resultCount']; i++){
             var album = {
                 title: "",
                 songs: []
             }
             var album_title = results[i]['collectionName'];
-            album.title = album_title;
-            albums.push(album);
+            if(albumString.indexOf(album_title) === -1) {
+              albumString += album_title;
+              album.title = album_title;
+              albums.push(album);
+            }
         }
-        //console.log(albums)
+        callback(albums);
     });
 }
 
-getArtistSongs("Kendrick Lamar", console.log)
+getAlbumSongs('To Pimp A Butterfly', function(songs) {
+  console.log(songs);
+});
