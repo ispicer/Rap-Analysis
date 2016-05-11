@@ -21,8 +21,24 @@ exports.getAlbums = function(artist, callback){
           console.log ('Search failed: %s', err.message);
         } else {
           // All good
-        response = data;
-        callback(response);
+        results = data['results'];
+        albums = [];
+        albumString = '';
+        async.forEach(results, function(result, callback) {
+            var album_title = result['collectionName'];
+            if(albumString.indexOf(album_title) === -1 && album_title !== '') {
+              var album = {
+                title: "",
+                songs: []
+              }
+              albumString += album_title;
+              album.title = album_title;
+              albums.push(album);
+            }
+            callback();
+          }, function(err) {
+            callback(albums);
+          });
         }
       }
     );
@@ -30,7 +46,6 @@ exports.getAlbums = function(artist, callback){
 
 exports.getAlbumSongs = function(album, callback){
     album = album.replace(/ /g, "+");
-    console.log(album)
     searchitunes (
       {
         media: 'music',
@@ -61,35 +76,18 @@ exports.getAlbumSongs = function(album, callback){
 }
 
 exports.getArtistSongs = function(artist, callback) {
-    exports.getAlbums(artist, function(response){
-        results = response['results'];
-        albums = [];
-        albumString = '';
-        async.series([
-          function() {
-            for(i=0; i < response['resultCount']; i++){
-              var album = {
-                  title: "",
-                  songs: []
-              }
-              var album_title = results[i]['collectionName'];
-              if(albumString.indexOf(album_title) === -1) {
-                albumString += album_title;
-                album.title = album_title;
-                albums.push(album);
-                console.log('in');
-              }
-            }
-          },
-          function() {
-            for(i=0; i < albums.length; i++) {
-              exports.getAlbumSongs(albums[i].title, function(songs) {
-                console.log('in');
-                albums.songs[i] = songs;
-              });
-            }
-          }
-        ],
-        callback(albums));
+  exports.getAlbums(artist, function(albums){
+      async.forEach(albums, function(album, callback) {
+        exports.getAlbumSongs(album.title, function(songs) {
+           album.songs = songs;
+           callback();
+         });
+      }, function(err) {
+        console.log(albums);
+      })
     });
 }
+
+exports.getArtistSongs('Kendrick Lamar', function(albums) {
+  console.log(albums);
+})

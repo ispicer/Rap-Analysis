@@ -4,12 +4,12 @@ app.config(['$routeProvider', function($routeProvider) {
 	$routeProvider
 
 	.when('/', {
-		templateUrl: 'searchEngine.html',
+		templateUrl: 'partials/searchEngine.html',
 		controller: 'searchController'
 	})
 
 	.when('/rapper', {
-		templateUrl: 'rapperPage.html',
+		templateUrl: 'partials/rapperPage.html',
 		controller: 'pageController'
 	});
 }]);
