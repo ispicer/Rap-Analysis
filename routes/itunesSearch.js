@@ -6,7 +6,6 @@ var http = require('http')
 // Find free Github app for iPhone in Dutch App Store
 exports.getAlbums = function(artist, callback){
     artist = artist.replace(/ /g, "+");
-    console.log(artist)
     searchitunes (
       {
         media: 'music',
@@ -75,7 +74,7 @@ exports.getAlbumSongs = function(album, callback){
     );
 }
 
-exports.getArtistSongs = function(artist, callback) {
+exports.getArtistProjects = function(artist, callback) {
   exports.getAlbums(artist, function(albums){
       async.forEach(albums, function(album, callback) {
         exports.getAlbumSongs(album.title, function(songs) {
@@ -87,7 +86,3 @@ exports.getArtistSongs = function(artist, callback) {
       })
     });
 }
-
-exports.getArtistSongs('Kendrick Lamar', function(albums) {
-  console.log(albums);
-})
